@@ -1,0 +1,6 @@
+# dsh bundle layer: mount the dsh-quicksight plugin (dsh/index.js via the
+# package root export). Registers the `quicksight_ocr` tool; no web routes,
+# no ports, server-side only.
+- insert:
+    - id: quicksight
+      name: 'dsh-quicksight'

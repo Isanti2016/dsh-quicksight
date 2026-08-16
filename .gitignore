@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.env
+.env.*
+config.json
+*.local
+.DS_Store
+test-plugin.mjs
+.quicksight-*

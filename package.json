@@ -1,0 +1,45 @@
+{
+  "name": "dsh-quicksight",
+  "version": "0.1.0",
+  "description": "Two-tier image reading for text-only models in DeepSeek Harness: fast local OCR (RapidOCR, offline) first, then a vision model via modlens as fallback.",
+  "type": "module",
+  "main": "dsh/index.js",
+  "exports": {
+    ".": "./dsh/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dsh",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "ocr",
+    "rapidocr",
+    "vision",
+    "image",
+    "quicksight"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Isanti2016/dsh-quicksight.git"
+  }
+}
