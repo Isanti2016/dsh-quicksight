@@ -72,6 +72,28 @@ export function apply(ctx, config = {}) {
     timeoutMs: timeoutMs + 20_000,
     isConcurrencySafe: () => true,
     presentCall: (args) => ({ card: 'generic', title: toolName, kind: 'read', rawInput: args }),
+    output: {
+      schema: {
+        type: 'object',
+        properties: {
+          tier: { type: 'number' },
+          source: { type: 'string' },
+          summary: { type: 'string' },
+          text: { type: 'string' },
+          uncertainty: { type: 'array', items: { type: 'string' } },
+        },
+        required: ['tier', 'source'],
+      },
+      render: (_args, value) => [
+        {
+          type: 'text',
+          text:
+            typeof value?.text === 'string' && value.text
+              ? `[dsh-quicksight tier-${value.tier} ${value.source}]\n${value.text}`
+              : `[dsh-quicksight tier-${value.tier} ${value.source}]\n${value.summary ?? JSON.stringify(value)}`,
+        },
+      ],
+    },
     async execute(args) {
       if (typeof args?.path !== 'string' || args.path.trim() === '') {
         throw new Error(`${toolName} needs a non-empty string "path".`)
