@@ -25,6 +25,9 @@
     }
   },
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "engines": {
     "node": ">=22.13"
   },

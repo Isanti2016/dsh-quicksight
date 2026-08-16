@@ -1,13 +1,18 @@
 # dsh-quicksight
 
-**DeepSeek Harness 双层图片识别插件**：为纯文本模型补上识图能力。
+**DeepSeek Harness 双层图片识别插件**：为纯文本模型补上识图能力，**本地图片识别 + 模型识别双通道**。
 
 ```
-Tier-1  快速本地 OCR（RapidOCR / PP-OCR / ONNX，CPU，约 2-3 秒，中文/英文准确，完全离线）
-Tier-2  慢速视觉模型兜底（经 modlens CLI 调用视觉引擎，约 20 秒，结构化证据）
+┌─────────────────────────────────────────────────────────┐
+│  本地图片识别（Local OCR）       模型识别（Vision Model） │
+│  Tier-1  快速本地 OCR           Tier-2  视觉模型兜底     │
+│  RapidOCR / PP-OCR / ONNX       modlens + 任意视觉引擎   │
+│  约 2-3 秒 · 完全离线 · 不上传   约 20 秒 · 结构化证据    │
+│  中文/英文准确 · 零 API 成本     summary/OCR/版面/语义    │
+└─────────────────────────────────────────────────────────┘
 ```
 
-规则：**能用本地 OCR 快速拿到文字就先 OCR；OCR 不行（空/过短/乱码）或需要视觉理解时，才回落视觉模型。**
+规则：**能用本地 OCR 快速拿到文字就先 OCR（本地图片识别）；OCR 不行（空/过短/乱码）或需要视觉理解时，才回落模型识别（视觉模型）。**
 
 ## 特性
 
@@ -100,6 +105,18 @@ npx -y @liustack/modlens config set provider openai
 - 本仓库**不含任何 API key / 令牌 / 个人路径**。
 - Tier-1 图片不出机器；Tier-2 图片会发送到你自选的视觉引擎（如 Nvidia/Gemini），敏感图片请优先 Tier-1 或自建本地视觉引擎。
 - 凭据只存本机：modlens 的 key 在 `~/.modlens/config.json`，不入库、不入会话日志。
+
+## 致谢（引用的开源项目）
+
+dsh-quicksight 站在以下优秀开源项目之上，特此致谢：
+
+- **[RapidOCR](https://github.com/RapidAI/RapidOCR)**（RapidAI）— Tier-1 本地 OCR 引擎（`rapidocr_onnxruntime`，PP-OCR 模型 + ONNX Runtime），中文/英文识别准确、CPU 秒级、跨平台。
+- **[PaddleOCR / PP-OCR](https://github.com/PaddlePaddle/PaddleOCR)**（PaddlePaddle）— RapidOCR 所承载的 OCR 检测/识别模型（PP-OCRv3+）的原始出处。
+- **[modlens](https://github.com/liustack/modlens)**（@liustack）— Tier-2 视觉桥接：dsh-quicksight 复用其 CLI 与 `~/.modlens/config.json` 配置，接入任意 OpenAI 兼容/Anthropic 视觉引擎。
+- **Nvidia NIM / Gemini / 其他 OpenAI 兼容端点** — Tier-2 可选的上游视觉引擎示例（由用户自行配置）。
+- **[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)**（dsh）— 插件宿主框架。
+
+> 说明：dsh-quicksight 不包含上述项目的代码，仅按各自开源协议调用/复用；Tier-1 使用 RapidOCR 需在其许可范围内，Tier-2 使用 modlens 与其所选引擎受各自条款与额度约束。
 
 ## 已知限制
 
